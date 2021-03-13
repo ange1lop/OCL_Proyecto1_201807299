@@ -5,6 +5,8 @@
  */
 package App;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author erick
@@ -15,12 +17,18 @@ public class Nodo {
     public Nodo hder;
     public String valor;
     public int id;
+    public boolean anulable;
+    public String primeros;
+    public String segundos;
 
-    public Nodo(Nodo hizq, Nodo hder, String valor, int id) {
+    public Nodo(Nodo hizq, Nodo hder, String valor, int id, String primero, String segundo, boolean anil) {
         this.hizq = hizq;
         this.hder = hder;
         this.valor = valor;
         this.id = id;
+        this.anulable = anil;
+        this.primeros = primero;
+        this.segundos = segundo;
     }
 
     public Nodo getHizq() {
@@ -71,6 +79,30 @@ public class Nodo {
                     + "nodo" + id + "->nodo" + hder.id + "\n";
         }
         return etiqueta;
+    }
+
+    public boolean isAnulable() {
+        return anulable;
+    }
+
+    public void setAnulable(boolean anulable) {
+        this.anulable = anulable;
+    }
+
+    public String getPrimeros() {
+        return primeros;
+    }
+
+    public void setPrimeros(String primeros) {
+        this.primeros = primeros;
+    }
+
+    public String getSegundos() {
+        return segundos;
+    }
+
+    public void setSegundos(String segundos) {
+        this.segundos = segundos;
     }
     
 }

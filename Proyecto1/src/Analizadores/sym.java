@@ -8,25 +8,85 @@ package Analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int div = 6;
-  public static final int resta = 4;
-  public static final int suma = 3;
-  public static final int mult = 5;
-  public static final int decimal = 8;
+  public static final int a47 = 22;
+  public static final int a46 = 21;
+  public static final int identificador = 2;
+  public static final int a45 = 20;
+  public static final int a44 = 19;
+  public static final int a43 = 18;
+  public static final int a125 = 38;
+  public static final int a42 = 17;
+  public static final int a124 = 37;
+  public static final int a41 = 16;
+  public static final int a123 = 36;
+  public static final int a40 = 15;
+  public static final int especiales = 5;
   public static final int EOF = 0;
-  public static final int entero = 7;
+  public static final int a39 = 14;
+  public static final int a38 = 13;
   public static final int error = 1;
-  public static final int nombre = 2;
+  public static final int a37 = 12;
+  public static final int a36 = 11;
+  public static final int a35 = 10;
+  public static final int a34 = 9;
+  public static final int entero = 3;
+  public static final int a33 = 8;
+  public static final int a96 = 35;
+  public static final int a64 = 29;
+  public static final int a63 = 28;
+  public static final int a95 = 34;
+  public static final int a62 = 27;
+  public static final int a94 = 33;
+  public static final int a61 = 26;
+  public static final int a93 = 32;
+  public static final int a92 = 31;
+  public static final int a60 = 25;
+  public static final int a91 = 30;
+  public static final int conj = 4;
+  public static final int a59 = 24;
+  public static final int a58 = 23;
+  public static final int colocho = 6;
+  public static final int cadena = 7;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "nombre",
-  "suma",
-  "resta",
-  "mult",
-  "div",
+  "identificador",
   "entero",
-  "decimal"
+  "conj",
+  "especiales",
+  "colocho",
+  "cadena",
+  "a33",
+  "a34",
+  "a35",
+  "a36",
+  "a37",
+  "a38",
+  "a39",
+  "a40",
+  "a41",
+  "a42",
+  "a43",
+  "a44",
+  "a45",
+  "a46",
+  "a47",
+  "a58",
+  "a59",
+  "a60",
+  "a61",
+  "a62",
+  "a63",
+  "a64",
+  "a91",
+  "a92",
+  "a93",
+  "a94",
+  "a95",
+  "a96",
+  "a123",
+  "a124",
+  "a125"
   };
 }
 

@@ -80,81 +80,63 @@ action code {:
 :}
 
 // terminal [Tipo] listaterminales;
-terminal String nombre, suma, resta, mult, div, entero, decimal;
-
+terminal String identificador, entero, conj,especiales;
+terminal String colocho, cadena;
+//ASCII
+terminal String a33,a34,a35,a36,a37,a38,a39,a40,a41,a42,a43,a44,a45,a46,a47,a58,a59,a60,a61,a62,a63,a64,a91,a92,a93,a94,a95,a96,a123,a124,a125;
 // non terminal [Tipo] listanoterminales;
-non terminal Nodo INICIO, EXPRESION;
+non terminal Nodo INICIO, CUERPO, ASCIICODE, LISTASIMBOLOS, EXPRESION,OBTENER,REGLAS;
 
-precedence left suma, resta;
-precedence left mult, div;
 
 start with INICIO;
     //VARIABLE::= VARIABLE int id ptcoma
                //| int id ptcoma
                //|error suma;
-INICIO::= EXPRESION:valor {:System.out.println(valor);
-    App.Aplicacion.list_of_names+=valor;
-    parser.Raiz = valor;
-    graficarArbol(valor,"operaciones");
+INICIO::= a123 CUERPO a37 a37 a37 a37 REGLAS a125 {:
+    System.out.println("Todo correcto");
+    //App.Aplicacion.list_of_names+=valor;
+    //parser.Raiz = valor;
+    //graficarArbol(valor,"operaciones");
 :};
-                //2        +       5
-                //creamos un nodo suma                              2*4+5-3/2*5*3*7/6*9
-//EREG ::= NOMBRE -> EXPRESION:valor{:parser.Raiz = valor;:}
-EXPRESION ::= EXPRESION:a suma EXPRESION:b {:
-                //RESULT=a+b;
-                Nodo nuevaSuma = new Nodo(a, b, "+", parser.contId);
-                parser.contId++;
-                RESULT = nuevaSuma;
-            :} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
-            | EXPRESION:a resta EXPRESION:b {:
-                //RESULT=a-b;
-                Nodo nuevaResta = new Nodo(a, b, "-", parser.contId);
-                parser.contId++;
-                RESULT = nuevaResta;
-            :}
-            | EXPRESION:a mult EXPRESION:b {:
-                //RESULT=a*b;
-                //addNodo("mult",a,b)
-                Nodo nuevaMult = new Nodo(a, b, "*", parser.contId);
-                parser.contId++;
-                RESULT = nuevaMult;
-            :} // mult EXPRESION:a EXPRESION:b
-            | EXPRESION:a div EXPRESION:b {:
-                //RESULT=a/b;
-                Nodo nuevaDiv = new Nodo(a, b, "/", parser.contId);
-                parser.contId++;
-                RESULT = nuevaDiv;
-            :}
-            //| menos EXPRESION:a
-            /*
-            {:
-                Nodo nuevaNegacion = new Nodo(null, a, "/", parser.contId);
-                parser.contId++;
-                RESULT = nuevaNegacion;
-            :}
-            */
-            //creamos los nodos de enteros
-            | entero:val {:
-                //RESULT=new Double(val);
-                Nodo nuevoEntero = new Nodo(null,null,val,parser.contId);
-                parser.contId++;
-                RESULT = nuevoEntero;
-            :}
-            | decimal:val {:
-                //RESULT=new Double(val);
-                Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId);
-                parser.contId++;
-                RESULT = nuevoDecimal;
-            :}
-            | error suma
-            //| error resta
-            //| error mult
-            //| error div
-            // | asteris EXPRESION
-            // | mas EXPRESION
-            // | punto EXPRESION EXPRESION <=> EXPRESION punto EXPRESION
-            ;
-//2+2*2.5+10*2
+
+CUERPO::= conj a58 identificador a45 a62 identificador colocho identificador a59 
+        |CUERPO conj a58 identificador a45 a62 identificador colocho identificador a59
+        |conj a58 identificador a45 a62 entero colocho entero a59 
+        |CUERPO conj a58 identificador a45 a62 entero colocho entero a59
+        |conj a58 identificador a45 a62 ASCIICODE colocho ASCIICODE a59 
+        |CUERPO conj a58 identificador a45 a62 ASCIICODE colocho ASCIICODE a59
+        |conj a58 identificador a45 a62 LISTASIMBOLOS a59 
+        |CUERPO conj a58 identificador a45 a62 LISTASIMBOLOS a59
+        |EXPRESION
+        |CUERPO EXPRESION
+
+;
+ASCIICODE::= a33 |a34|a35|a36|a37|a38|a39|a40|a41|a42|a43|a44|a45|a46|a47|a58|a59|a60|a61|a62|a63|a64|a91|a92|a93|a94|a95|a96|a123|a124|a125|especiales
+;
+
+LISTASIMBOLOS::= LISTASIMBOLOS a44 identificador
+        |identificador
+        |LISTASIMBOLOS a44 entero
+        |entero
+;
+EXPRESION::= identificador a45 a62 OBTENER a59
+;
+OBTENER::= a124 OBTENER OBTENER
+        | a46 OBTENER OBTENER
+        | a63 OBTENER
+        | a43 OBTENER
+        | a42 OBTENER
+        |a123 identificador a125
+        |cadena
+        |especiales
+
+;
+REGLAS::= identificador a58 cadena a59
+        | REGLAS identificador a58 cadena a59
+;
+
+
+
 
 
 /*LID::= LID comaa nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:}
