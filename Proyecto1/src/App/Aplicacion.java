@@ -24,7 +24,7 @@ public class Aplicacion extends javax.swing.JFrame {
     
     public static String list_of_names="";
     public static ArrayList<Errores> listaErrores = new ArrayList<Errores>();
-    
+    public static ArrayList<Datos> expresiones = new ArrayList<Datos>();
     public Aplicacion() {
         initComponents();
     }

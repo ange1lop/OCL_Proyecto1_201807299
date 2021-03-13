@@ -66,9 +66,9 @@ public class Nodo {
     public String getCodigoInterno() {
         String etiqueta;
         if (hizq == null && hder == null) {
-            etiqueta = "nodo" + id + " [ label =\"" + valor+"\"];\n";
+            etiqueta = "nodo" + id + " [label=\""+primeros+"|{Valor:"+valor+"|id:"+id+"}|{{"+segundos+"}}\"]; \n";
         } else {
-            etiqueta = "nodo" + id + " [ label =\"" + valor + "\"];\n";
+            etiqueta = "nodo" + id + " [label=\""+primeros+"|{Valor:"+valor+"|id:"+id+"}|{{"+segundos+"}}\"]; \n";
         }
         if (hizq != null) {
             etiqueta = etiqueta + hizq.getCodigoInterno()

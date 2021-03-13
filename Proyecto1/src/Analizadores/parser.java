@@ -259,7 +259,7 @@ public class parser extends java_cup.runtime.lr_parser {
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
-            pw.println("node[shape=box]");
+            pw.println("node[shape=record]");
             pw.println("concentrate=true");
             pw.println(act.getCodigoInterno());
             pw.println("}");
@@ -279,9 +279,9 @@ public class parser extends java_cup.runtime.lr_parser {
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\erick\\OneDrive\\Escritorio\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Angel\\OneDrive\\Escritorio\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\erick\\OneDrive\\Escritorio\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Angel\\OneDrive\\Escritorio\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -791,6 +791,17 @@ class CUP$parser$actions {
           case 48: // EXPRESION ::= identificador a45 a62 OBTENER a59 
             {
               Nodo RESULT =null;
+		int nombreleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int nombreright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		String nombre = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
+		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		
+            App.Aplicacion.list_of_names+=valor;
+            parser.Raiz = valor;
+            graficarArbol(valor,nombre);
+            parser.contId = 0;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -800,7 +811,25 @@ class CUP$parser$actions {
           case 49: // OBTENER ::= a124 OBTENER OBTENER 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int valor1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valor1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Nodo valor1 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int valor2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valor2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            boolean mandar = false;
+            if (valor1.isAnulable() || valor2.isAnulable()){
+                mandar = true;
+            }
+            
+            Nodo nuevoDecimal = new Nodo(valor1,valor2,"\\|",parser.contId,valor1.getPrimeros()+","+valor2.getPrimeros(),valor1.getSegundos()+","+valor2.getSegundos(),false);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -809,7 +838,32 @@ class CUP$parser$actions {
           case 50: // OBTENER ::= a46 OBTENER OBTENER 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int valor1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valor1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Nodo valor1 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int valor2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valor2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            String calculado1 =valor1.getPrimeros();
+            String calculado2 = valor2.getSegundos();
+            boolean mandar = false;
+            if (valor1.isAnulable() && valor2.isAnulable()){
+                mandar = true;
+            }
+            if (valor1.isAnulable()){
+                calculado1 = valor1.getPrimeros()+"," + valor2.getPrimeros() ;
+            }
+            if (valor2.isAnulable()){
+                calculado2 = valor1.getSegundos()+"," + valor2.getSegundos();
+            }
+            Nodo nuevoDecimal = new Nodo(valor1,valor2,val,parser.contId,calculado1,calculado2,mandar);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -818,7 +872,17 @@ class CUP$parser$actions {
           case 51: // OBTENER ::= a63 OBTENER 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int valor2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valor2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -827,7 +891,21 @@ class CUP$parser$actions {
           case 52: // OBTENER ::= a43 OBTENER 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int valor2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valor2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            boolean mandar = false;
+            if (valor2.isAnulable()){
+                mandar = true;
+            }
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),mandar);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -836,7 +914,17 @@ class CUP$parser$actions {
           case 53: // OBTENER ::= a42 OBTENER 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int valor2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valor2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -845,7 +933,14 @@ class CUP$parser$actions {
           case 54: // OBTENER ::= a123 identificador a125 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		
+            Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -854,7 +949,16 @@ class CUP$parser$actions {
           case 55: // OBTENER ::= cadena 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            String str = val;
+            String enviar = str.replaceAll("\"", "");
+            Nodo nuevoDecimal = new Nodo(null,null,enviar,parser.contId,""+contId,""+contId,false);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -863,7 +967,15 @@ class CUP$parser$actions {
           case 56: // OBTENER ::= especiales 
             {
               Nodo RESULT =null;
-
+		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+                //RESULT=new Double(val);
+            Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("OBTENER",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

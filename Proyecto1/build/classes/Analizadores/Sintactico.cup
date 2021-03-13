@@ -4,11 +4,13 @@ import App.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 parser code
 {:  
     public static int contId=1;
     public static Nodo Raiz;
+    public static List<Siguiente> sigue = new List<Siguiente>();
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -17,7 +19,7 @@ parser code
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
-            pw.println("node[shape=box]");
+            pw.println("node[shape=record]");
             pw.println("concentrate=true");
             pw.println(act.getCodigoInterno());
             pw.println("}");
@@ -37,9 +39,9 @@ parser code
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\erick\\OneDrive\\Escritorio\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Angel\\OneDrive\\Escritorio\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\erick\\OneDrive\\Escritorio\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Angel\\OneDrive\\Escritorio\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -119,16 +121,110 @@ LISTASIMBOLOS::= LISTASIMBOLOS a44 identificador
         |LISTASIMBOLOS a44 entero
         |entero
 ;
-EXPRESION::= identificador a45 a62 OBTENER a59
+EXPRESION::= identificador:nombre a45 a62 OBTENER:valor a59 {:
+            App.Aplicacion.list_of_names+=valor;
+            Nodo nuevoDecimal = new Nodo(null,null,"#",parser.contId,""+contId,""+contId,false);
+            parser.contId++;
+            Nodo raiz = new Nodo(valor,nuevoDecimal,".",parser.valor.getPrimeros(),nuevoDecimal.getSegundos(),false);
+            parser.Raiz = raiz;
+            graficarArbol(raiz,nombre);
+            parser.contId = 0;
+:}
 ;
-OBTENER::= a124 OBTENER OBTENER
-        | a46 OBTENER OBTENER
-        | a63 OBTENER
-        | a43 OBTENER
-        | a42 OBTENER
-        |a123 identificador a125
-        |cadena
-        |especiales
+OBTENER::= a124:val OBTENER:valor1 OBTENER:valor2 {:
+            boolean mandar = false;
+            if (valor1.isAnulable() || valor2.isAnulable()){
+                mandar = true;
+            }
+            
+            Nodo nuevoDecimal = new Nodo(valor1,valor2,"\\|",parser.contId,valor1.getPrimeros()+","+valor2.getPrimeros(),valor1.getSegundos()+","+valor2.getSegundos(),false);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        | a46:val OBTENER:valor1 OBTENER:valor2 {:
+            String calculado1 =valor1.getPrimeros();
+            String calculado2 = valor2.getSegundos();
+            boolean mandar = false;
+            if (valor1.isAnulable() && valor2.isAnulable()){
+                mandar = true;
+            }
+            if (valor1.isAnulable()){
+                calculado1 = valor1.getPrimeros()+"," + valor2.getPrimeros() ;
+            }
+            if (valor2.isAnulable()){
+                calculado2 = valor1.getSegundos()+"," + valor2.getSegundos();
+            }
+            String[] parts = valor1.getSegundos.split(",");
+            for(String t:parts){
+                for(Siguiente tem:sigue){
+                    if(tem.getValor() == t ){
+                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                    }
+                }
+            }
+            Nodo nuevoDecimal = new Nodo(valor1,valor2,val,parser.contId,calculado1,calculado2,mandar);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        | a63:val OBTENER:valor2 {:
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        | a43:val OBTENER:valor2 {:
+            boolean mandar = false;
+            if (valor2.isAnulable()){
+                mandar = true;
+            }
+            String[] parts = valor2.getSegundos.split(",");
+            for(String t:parts){
+                for(Siguiente tem:sigue){
+                    if(tem.getValor() == t ){
+                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                    }
+                }
+            }
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),mandar);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        | a42:val  OBTENER:valor2 {:
+            Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
+            String[] parts = valor2.getSegundos.split(",");
+            for(String t:parts){
+                for(Siguiente tem:sigue){
+                    if(tem.getValor() == t ){
+                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                    }
+                }
+            }
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        |a123 identificador:val a125 {:
+            Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,val,"");
+            parser.sigue.add(snuevo);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        |cadena:val{:
+            String str = val;
+            String enviar = str.replaceAll("\"", "");
+            Nodo nuevoDecimal = new Nodo(null,null,enviar,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,enviar,"");
+            parser.sigue.add(snuevo);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
+        |especiales:val {:
+                //RESULT=new Double(val);
+            Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,val,"");
+            parser.sigue.add(snuevo);
+            parser.contId++;
+            RESULT = nuevoDecimal;
+        :}
 
 ;
 REGLAS::= identificador a58 cadena a59
