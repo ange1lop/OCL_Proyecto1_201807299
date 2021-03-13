@@ -12,6 +12,10 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 /**
  *
  * @author erick
@@ -21,7 +25,6 @@ public class Aplicacion extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    
     public static String list_of_names="";
     public static ArrayList<Errores> listaErrores = new ArrayList<Errores>();
     public static ArrayList<Datos> expresiones = new ArrayList<Datos>();
@@ -76,40 +79,40 @@ public class Aplicacion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(39, 39, 39)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(123, 123, 123)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCompilar)
-                        .addGap(44, 44, 44)))
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(358, Short.MAX_VALUE))
+                        .addGap(26, 26, 26)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(440, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addComponent(jScrollPane1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCompilar)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCompilar)
+                            .addComponent(jButton1))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
 
         pack();
@@ -125,6 +128,9 @@ public class Aplicacion extends javax.swing.JFrame {
             sintactico = new Analizadores.parser(new Analizadores.Lexico(new StringReader(path)));
             sintactico.parse();
             txtSalida.setText(list_of_names);
+            txtSalida.setText(txtSalida.getText()+"\n"+expresiones.size());
+            generarVista();
+            ReporteTablaSiguiente();
         } catch (Exception e) {
         }
         for(int i =0; i<listaErrores.size();i++){
@@ -136,7 +142,7 @@ public class Aplicacion extends javax.swing.JFrame {
         FileWriter fichero = null;
                 PrintWriter pw = null;
                 try {
-                    fichero = new FileWriter("C:\\Users\\erick\\OneDrive\\Escritorio\\Reporte Errores.html");
+                    fichero = new FileWriter("C:\\Users\\Angel\\OneDrive\\Escritorio\\Reporte Errores.html");
                     pw = new PrintWriter(fichero);
                     //comenzamos a escribir el html
                     pw.println("<html>");
@@ -181,6 +187,63 @@ public class Aplicacion extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    public void ReporteTablaSiguiente(){
+        FileWriter fichero = null;
+                PrintWriter pw = null;
+                try {
+                    
+                    for(Datos d:expresiones){
+                        fichero = new FileWriter("C:\\Users\\Angel\\OneDrive\\Escritorio\\"+d.nombre+".html");
+                        String rep = d.reporteSiguiente();
+                        pw = new PrintWriter(fichero);
+                        //comenzamos a escribir el html
+                        pw.println(rep);
+                        
+                        pw.close();
+                    }
+                    
+                } catch (Exception e) {
+                }finally{
+                    if(null!=fichero){
+                        try {
+                            fichero.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                try {
+            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "SIGUIENTES_201807299\\"+"Reporte ErroresL.html");
+            //System.out.println("Final");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void generarVista(){
+        DefaultMutableTreeNode style=new DefaultMutableTreeNode("Compiladores");  
+        DefaultMutableTreeNode color=new DefaultMutableTreeNode("Arboles");  
+        DefaultMutableTreeNode color4=new DefaultMutableTreeNode("TablaSiguientes");
+        DefaultMutableTreeNode color1=new DefaultMutableTreeNode("Tabla de transicion");  
+        DefaultMutableTreeNode color2=new DefaultMutableTreeNode("AFD");  
+        DefaultMutableTreeNode color3=new DefaultMutableTreeNode("THOPSON");  
+        style.add(color);  
+        style.add(color4);  
+        style.add(color1);  
+        style.add(color2);  
+        style.add(color3);
+        for(Datos d : expresiones){
+            DefaultMutableTreeNode red=new DefaultMutableTreeNode(d.nombre+".jpg");
+            color.add(red);
+            DefaultMutableTreeNode red1=new DefaultMutableTreeNode(d.nombre+".html");
+            color4.add(red1);
+            DefaultMutableTreeNode red2=new DefaultMutableTreeNode(d.nombre+".html");
+            color1.add(red2);
+            DefaultMutableTreeNode red3=new DefaultMutableTreeNode(d.nombre+".jpg");
+            color2.add(red3);
+        }
+        DefaultTreeModel root = new DefaultTreeModel(style);
+        jTree1.setModel(root);
+        }
     /**
      * @param args the command line arguments
      */

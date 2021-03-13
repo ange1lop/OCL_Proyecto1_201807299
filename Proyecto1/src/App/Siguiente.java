@@ -20,6 +20,7 @@ public class Siguiente {
         this.hoja = hoja;
         this.valor = valor;
         this.siguiente = siguiente;
+        
     }
 
     

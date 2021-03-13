@@ -10,6 +10,7 @@ import App.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -251,6 +252,7 @@ public class parser extends java_cup.runtime.lr_parser {
   
     public static int contId=1;
     public static Nodo Raiz;
+    public static ArrayList<Siguiente> sigue = new ArrayList<Siguiente>();
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -799,8 +801,30 @@ class CUP$parser$actions {
 		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
             App.Aplicacion.list_of_names+=valor;
-            parser.Raiz = valor;
-            graficarArbol(valor,nombre);
+            Nodo nuevoDecimal = new Nodo(null,null,"#",parser.contId,""+contId,""+contId,false);
+            Siguiente nusi = new Siguiente(contId,"#","");
+            parser.sigue.add(nusi);
+            parser.contId++;
+            String prEnviar = valor.getPrimeros();
+            if (valor.isAnulable()){
+                prEnviar += nuevoDecimal.getId();
+            }
+            Nodo raiz = new Nodo(valor,nuevoDecimal,".",parser.contId,prEnviar,nuevoDecimal.getSegundos(),false);
+            String[] parts = valor.getSegundos().split(",");
+            for(String t:parts){
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)  ){
+                        tem.setSiguiente(tem.getSiguiente()+","+nuevoDecimal.getId());
+                    }
+                }
+            }
+            ArrayList<Siguiente> temo = new ArrayList<Siguiente>();
+            temo.addAll(new ArrayList<>(parser.sigue));
+            Datos datosnuevo = new Datos(raiz, temo,nuevoDecimal.getId(),prEnviar,nombre);
+            App.Aplicacion.expresiones.add(datosnuevo);
+            parser.Raiz = raiz;
+            parser.sigue.clear();
+            graficarArbol(raiz,nombre);
             parser.contId = 0;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -860,6 +884,36 @@ class CUP$parser$actions {
             if (valor2.isAnulable()){
                 calculado2 = valor1.getSegundos()+"," + valor2.getSegundos();
             }
+            String[] parts = valor1.getSegundos().split(",");
+            for(String t:parts){
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
+                    }
+                }
+            }
             Nodo nuevoDecimal = new Nodo(valor1,valor2,val,parser.contId,calculado1,calculado2,mandar);
             parser.contId++;
             RESULT = nuevoDecimal;
@@ -902,6 +956,36 @@ class CUP$parser$actions {
             if (valor2.isAnulable()){
                 mandar = true;
             }
+            String[] parts = valor2.getSegundos().split(",");
+            for(String t:parts){
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t) ){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
+                    }
+                }
+            }
             Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),mandar);
             parser.contId++;
             RESULT = nuevoDecimal;
@@ -922,6 +1006,37 @@ class CUP$parser$actions {
 		Nodo valor2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
             Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
+            String[] parts = valor2.getSegundos().split(",");
+            for(String t:parts){
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                            
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
+                    }
+                }
+            }
             parser.contId++;
             RESULT = nuevoDecimal;
         
@@ -938,6 +1053,8 @@ class CUP$parser$actions {
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
             Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,val,"");
+            parser.sigue.add(snuevo);
             parser.contId++;
             RESULT = nuevoDecimal;
         
@@ -956,6 +1073,8 @@ class CUP$parser$actions {
             String str = val;
             String enviar = str.replaceAll("\"", "");
             Nodo nuevoDecimal = new Nodo(null,null,enviar,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,enviar,"");
+            parser.sigue.add(snuevo);
             parser.contId++;
             RESULT = nuevoDecimal;
         
@@ -973,6 +1092,8 @@ class CUP$parser$actions {
 		
                 //RESULT=new Double(val);
             Nodo nuevoDecimal = new Nodo(null,null,val,parser.contId,""+contId,""+contId,false);
+            Siguiente snuevo = new Siguiente(contId,val,"");
+            parser.sigue.add(snuevo);
             parser.contId++;
             RESULT = nuevoDecimal;
         

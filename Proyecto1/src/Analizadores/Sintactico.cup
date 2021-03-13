@@ -4,13 +4,13 @@ import App.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.ArrayList;
 
 parser code
 {:  
     public static int contId=1;
     public static Nodo Raiz;
-    public static List<Siguiente> sigue = new List<Siguiente>();
+    public static ArrayList<Siguiente> sigue = new ArrayList<Siguiente>();
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -124,9 +124,28 @@ LISTASIMBOLOS::= LISTASIMBOLOS a44 identificador
 EXPRESION::= identificador:nombre a45 a62 OBTENER:valor a59 {:
             App.Aplicacion.list_of_names+=valor;
             Nodo nuevoDecimal = new Nodo(null,null,"#",parser.contId,""+contId,""+contId,false);
+            Siguiente nusi = new Siguiente(contId,"#","");
+            parser.sigue.add(nusi);
             parser.contId++;
-            Nodo raiz = new Nodo(valor,nuevoDecimal,".",parser.valor.getPrimeros(),nuevoDecimal.getSegundos(),false);
+            String prEnviar = valor.getPrimeros();
+            if (valor.isAnulable()){
+                prEnviar += nuevoDecimal.getId();
+            }
+            Nodo raiz = new Nodo(valor,nuevoDecimal,".",parser.contId,prEnviar,nuevoDecimal.getSegundos(),false);
+            String[] parts = valor.getSegundos().split(",");
+            for(String t:parts){
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)  ){
+                        tem.setSiguiente(tem.getSiguiente()+","+nuevoDecimal.getId());
+                    }
+                }
+            }
+            ArrayList<Siguiente> temo = new ArrayList<Siguiente>();
+            temo.addAll(new ArrayList<>(parser.sigue));
+            Datos datosnuevo = new Datos(raiz, temo,nuevoDecimal.getId(),prEnviar,nombre);
+            App.Aplicacion.expresiones.add(datosnuevo);
             parser.Raiz = raiz;
+            parser.sigue.clear();
             graficarArbol(raiz,nombre);
             parser.contId = 0;
 :}
@@ -154,11 +173,33 @@ OBTENER::= a124:val OBTENER:valor1 OBTENER:valor2 {:
             if (valor2.isAnulable()){
                 calculado2 = valor1.getSegundos()+"," + valor2.getSegundos();
             }
-            String[] parts = valor1.getSegundos.split(",");
+            String[] parts = valor1.getSegundos().split(",");
             for(String t:parts){
-                for(Siguiente tem:sigue){
-                    if(tem.getValor() == t ){
-                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
                     }
                 }
             }
@@ -176,11 +217,33 @@ OBTENER::= a124:val OBTENER:valor1 OBTENER:valor2 {:
             if (valor2.isAnulable()){
                 mandar = true;
             }
-            String[] parts = valor2.getSegundos.split(",");
+            String[] parts = valor2.getSegundos().split(",");
             for(String t:parts){
-                for(Siguiente tem:sigue){
-                    if(tem.getValor() == t ){
-                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t) ){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
                     }
                 }
             }
@@ -190,11 +253,34 @@ OBTENER::= a124:val OBTENER:valor1 OBTENER:valor2 {:
         :}
         | a42:val  OBTENER:valor2 {:
             Nodo nuevoDecimal = new Nodo(valor2,null,val,parser.contId,valor2.getPrimeros(),valor2.getSegundos(),true);
-            String[] parts = valor2.getSegundos.split(",");
+            String[] parts = valor2.getSegundos().split(",");
             for(String t:parts){
-                for(Siguiente tem:sigue){
-                    if(tem.getValor() == t ){
-                        tem.setSiguiente(tem.getSiguiente()+","+valor2.getPrimeros())
+                for(Siguiente tem:parser.sigue){
+                    if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)){
+                        if(tem.getSiguiente().equals("")){
+                            String[] parts2 = tem.getSiguiente().split(",");
+                            String[] parts3 = valor2.getPrimeros().split(",");
+                            boolean ingresar = true;
+                            for(String ds:parts3){
+                                    for(String ds2:parts2){
+                                        if(ds2.equals(ds)){
+                                            ingresar = false;
+                                            break;
+                                        }
+                                        if(ingresar){
+                                            if(tem.getSiguiente().equals("")){
+                                                tem.setSiguiente(ds);
+                                            }else{
+                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            }
+                                            
+                                        }
+                                    }
+                            }
+                            
+                        }else{
+                            tem.setSiguiente(valor2.getPrimeros());
+                        }
                     }
                 }
             }

@@ -105,4 +105,5 @@ public class Nodo {
         this.segundos = segundos;
     }
     
+    
 }
