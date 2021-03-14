@@ -128,6 +128,21 @@ public class Datos {
         }
     }
     
+    public void calcularEstados(){
+        for(Transicion s:tablaTransiciones){
+            boolean ingreso = true;
+            for(String terminal :estados){
+                if(s.getEstado().equals(terminal)){
+                    ingreso = false;
+                    break;
+                }
+            }
+            if(ingreso){
+                estados.add(s.getEstado());
+            }
+        }
+    }
+    
     public void calcularTransicion(String estado){
         String[] estadosI = estado.split(",");
         ArrayList<String> estadosCalculados = new ArrayList<String>();
@@ -230,6 +245,7 @@ public class Datos {
     public String generarTablaTransicion(){
         calcularTerminales();
         calcularTransicion(this.estadoInicial);
+        calcularEstados();
         String repo = "<!DOCTYPE html>\n" +
 "<html lang=\"en\">\n" +
 "<head>\n" +
@@ -255,17 +271,17 @@ public class Datos {
         }
         repo +="      </tr>\n" +
 "    </thead>\n" +
-"    <tbody>\n";
-        for(int k =0;k<this.contador;k++){
+"    <tbody>\n";int contador4 = 0;
+        for(String estado:estados){
             repo += "      <tr>\n";
-            String nombreEstado = "S"+k;
+            String nombreEstado = "S"+contador4;
             repo +="        <td>"+nombreEstado+"</td>\n" ;
             for(String terminal :terminales){
                 boolean ingresot = true;
                 for(Transicion s:tablaTransiciones){
-                    if(s.getNombre().equals(nombreEstado) && s.getValor().equals(terminal)){
+                    if(s.getEstado().equals(estado) && s.getValor().equals(terminal)){
                         for(Transicion s2: tablaTransiciones){
-                            if(s2.getEstado().equals(s.getEstadoF())){
+                            if(s2.getEstadoF().equals(s.getEstadoF())){
                                 repo +="        <td>"+s2.getNombre()+"</td>\n" ;
                                 ingresot = false;
                                 break;
@@ -279,9 +295,9 @@ public class Datos {
                     repo +="        <td>------</td>\n" ;
                 }
             }
+            contador4++;
             repo += "      </tr>\n";
         }
-        
         repo += "</tbody>\n" +
 "  </table>\n" +
 "</div>\n" +
