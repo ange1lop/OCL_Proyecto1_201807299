@@ -131,6 +131,7 @@ public class Aplicacion extends javax.swing.JFrame {
             txtSalida.setText(txtSalida.getText()+"\n"+expresiones.size());
             generarVista();
             ReporteTablaSiguiente();
+            ReporteTransicion();
         } catch (Exception e) {
         }
         for(int i =0; i<listaErrores.size();i++){
@@ -195,6 +196,40 @@ public class Aplicacion extends javax.swing.JFrame {
                     for(Datos d:expresiones){
                         fichero = new FileWriter("C:\\Users\\Angel\\OneDrive\\Escritorio\\"+d.nombre+".html");
                         String rep = d.reporteSiguiente();
+                        pw = new PrintWriter(fichero);
+                        //comenzamos a escribir el html
+                        pw.println(rep);
+                        
+                        pw.close();
+                    }
+                    
+                } catch (Exception e) {
+                }finally{
+                    if(null!=fichero){
+                        try {
+                            fichero.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                try {
+            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "SIGUIENTES_201807299\\"+"Reporte ErroresL.html");
+            //System.out.println("Final");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void ReporteTransicion(){
+        FileWriter fichero = null;
+                PrintWriter pw = null;
+                try {
+                    
+                    for(Datos d:expresiones){
+                        fichero = new FileWriter("C:\\Users\\Angel\\OneDrive\\Escritorio\\"+d.nombre+"tr.html");
+                        String rep = d.generarTablaTransicion();
+                        System.out.println("Tamano de transiciones");
+                        System.out.println(d.tablaTransiciones.size());
                         pw = new PrintWriter(fichero);
                         //comenzamos a escribir el html
                         pw.println(rep);

@@ -825,7 +825,7 @@ class CUP$parser$actions {
             parser.Raiz = raiz;
             parser.sigue.clear();
             graficarArbol(raiz,nombre);
-            parser.contId = 0;
+            parser.contId = 1;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -888,7 +888,7 @@ class CUP$parser$actions {
             for(String t:parts){
                 for(Siguiente tem:parser.sigue){
                     if(!t.equals("")  && tem.getHoja() ==  Integer.parseInt(t)){
-                        if(tem.getSiguiente().equals("")){
+                        if(!tem.getSiguiente().equals("")){
                             String[] parts2 = tem.getSiguiente().split(",");
                             String[] parts3 = valor2.getPrimeros().split(",");
                             boolean ingresar = true;
@@ -898,21 +898,32 @@ class CUP$parser$actions {
                                             ingresar = false;
                                             break;
                                         }
-                                        if(ingresar){
-                                            if(tem.getSiguiente().equals("")){
-                                                tem.setSiguiente(ds);
-                                            }else{
-                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
-                                            }
+                                        
+                                    }
+                                    System.out.println("aqui los siguiente almacenados");
+                                    System.out.println(tem.getSiguiente());
+                                    System.out.println("ingresar:"+ds);
+                                    if(ingresar){
+                                        if(tem.getSiguiente().equals("")){
+                                            tem.setSiguiente(ds);
+                                        }else{
+                                            System.out.println(tem.getSiguiente());
+                                            tem.setSiguiente(tem.getSiguiente()+","+ds);
                                         }
                                     }
                             }
                             
                         }else{
+                            System.out.println(tem.getSiguiente());
                             tem.setSiguiente(valor2.getPrimeros());
+                            System.out.println("no habia nada");
+                            
                         }
                     }
                 }
+                System.out.println(parser.contId);
+                System.out.println(t);
+                System.out.println("-----");
             }
             Nodo nuevoDecimal = new Nodo(valor1,valor2,val,parser.contId,calculado1,calculado2,mandar);
             parser.contId++;
@@ -970,12 +981,14 @@ class CUP$parser$actions {
                                             ingresar = false;
                                             break;
                                         }
-                                        if(ingresar){
-                                            if(tem.getSiguiente().equals("")){
-                                                tem.setSiguiente(ds);
-                                            }else{
-                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
-                                            }
+                                        
+                                    }
+                                    if(ingresar){
+                                        if(tem.getSiguiente().equals("")){
+                                            tem.setSiguiente(ds);
+                                        }else{
+                                            tem.setSiguiente(tem.getSiguiente()+","+ds);
+                                            
                                         }
                                     }
                             }
@@ -1020,14 +1033,15 @@ class CUP$parser$actions {
                                             ingresar = false;
                                             break;
                                         }
-                                        if(ingresar){
-                                            if(tem.getSiguiente().equals("")){
-                                                tem.setSiguiente(ds);
-                                            }else{
-                                                tem.setSiguiente(tem.getSiguiente()+","+ds);
-                                            }
-                                            
+                                        
+                                    }
+                                    if(ingresar){
+                                        if(tem.getSiguiente().equals("")){
+                                            tem.setSiguiente(ds);
+                                        }else{
+                                            tem.setSiguiente(tem.getSiguiente()+","+ds);
                                         }
+                                            
                                     }
                             }
                             

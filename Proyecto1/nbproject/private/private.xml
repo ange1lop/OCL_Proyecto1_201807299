@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/Proyecto1/src/Analizadores/Analizadores.java</file>
-            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/Proyecto1/src/Analizadores/Lexico.jflex</file>
-            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/Proyecto1/src/Analizadores/parser.java</file>
-            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/Proyecto1/src/Analizadores/Sintactico.cup</file>
+            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/OCL_Proyecto1_201807299/Proyecto1/src/App/Siguiente.java</file>
+            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/OCL_Proyecto1_201807299/Proyecto1/src/App/Datos.java</file>
+            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/OCL_Proyecto1_201807299/Proyecto1/src/App/Transicion.java</file>
+            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/OCL_Proyecto1_201807299/Proyecto1/src/App/Aplicacion.java</file>
+            <file>file:/C:/Users/Angel/OneDrive/Documents/Compi/Proyecto/OCL_Proyecto1_201807299/Proyecto1/src/Analizadores/parser.java</file>
         </group>
     </open-files>
 </project-private>
